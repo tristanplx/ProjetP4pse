@@ -11,6 +11,11 @@ void afficherGrille(char grille[ROWS][COLS]) {
         }
         printf("|\n");
     }
+    // Afficher les numéros de colonnes
+    for (int j = 0; j < COLS; j++) {
+        printf(" %d", j + 1);
+    }
+    printf("\n");
 }
 
 void initialiserGrille(char grille[ROWS][COLS]) {
