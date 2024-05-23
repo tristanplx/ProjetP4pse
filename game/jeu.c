@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include "../ordinateur/ordinateur.h" 
+#include "../ordinateur/ordinateur.h"
 #include "jeu.h"
 
 #define ROWS 6

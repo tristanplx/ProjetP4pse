@@ -229,7 +229,6 @@ int meilleurCoup(int grilleJeu[LIGNES][COLONNES], int profondeur) {
 
 int main() {
 	int grillePoids[LIGNES][COLONNES];
-	int grilleJeu[LIGNES][COLONNES] = {0};
 
 	initialiserMatrice(grillePoids);
 	return 0;

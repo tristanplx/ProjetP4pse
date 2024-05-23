@@ -12,4 +12,6 @@ void jeu();
 void interface();
 bool verifierVictoire(char grille[ROWS][COLS], char pion);
 
+
+
 #endif // JEU_H
