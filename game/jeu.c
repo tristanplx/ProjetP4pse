@@ -6,10 +6,13 @@
 #define ROWS 6
 #define COLS 7
 
-void afficherGrille(char grille[ROWS][COLS]) {
+#define JOUEUR 1
+#define BOT 2
+
+void afficherGrille(int grille[ROWS][COLS]) {
     for (int i = 0; i < ROWS; i++) {
         for (int j = 0; j < COLS; j++) {
-            printf("|%c", grille[i][j]);
+            printf("|%c", grille[i][j] == 0 ? ' ' : (grille[i][j] == JOUEUR ? 'X' : 'O'));
         }
         printf("|\n");
     }
@@ -20,18 +23,18 @@ void afficherGrille(char grille[ROWS][COLS]) {
     printf("\n");
 }
 
-void initialiserGrille(char grille[ROWS][COLS]) {
+void initialiserGrille(int grille[ROWS][COLS]) {
     for (int i = 0; i < ROWS; i++) {
         for (int j = 0; j < COLS; j++) {
-            grille[i][j] = ' ';
+            grille[i][j] = 0; // Utilisez 0 pour représenter une case vide
         }
     }
 }
 
-void ajouterPion(char grille[ROWS][COLS], int colonne, char pion) {
+void ajouterPion(int grille[ROWS][COLS], int colonne, int pion) {
     int ligne = ROWS - 1;
     while (ligne >= 0) {
-        if (grille[ligne][colonne] == ' ') {
+        if (grille[ligne][colonne] == 0) {
             grille[ligne][colonne] = pion;
             break;
         }
@@ -39,7 +42,7 @@ void ajouterPion(char grille[ROWS][COLS], int colonne, char pion) {
     }
 }
 
-bool verifierVictoire(char grille[ROWS][COLS], char pion) {
+bool verifierVictoire(int grille[ROWS][COLS], int pion) {
     // Vérifier les lignes
     for (int i = 0; i < ROWS; i++) {
         for (int j = 0; j < COLS - 3; j++) {
@@ -80,7 +83,7 @@ bool verifierVictoire(char grille[ROWS][COLS], char pion) {
 }
 
 void jeu() {
-    char grille[ROWS][COLS];
+    int grille[ROWS][COLS];
     int joueur = 1;
     int colonne;
 
@@ -97,10 +100,10 @@ void jeu() {
         colonne--; // Convertir de l'index 1 à l'index 0
 
         // Ajouter le pion dans la colonne choisie
-        ajouterPion(grille, colonne, (joueur == 1) ? 'X' : 'O');
+        ajouterPion(grille, colonne, joueur);
 
         // Vérifier si le joueur a gagné
-        if (verifierVictoire(grille, (joueur == 1) ? 'X' : 'O')) {
+        if (verifierVictoire(grille, joueur)) {
             printf("Le joueur %d a gagné!\n", joueur);
             break;
         }
@@ -112,7 +115,6 @@ void jeu() {
     // Afficher la grille finale
     afficherGrille(grille);
 }
-
 
 void interface() {
     int choix;
@@ -138,7 +140,7 @@ void interface() {
 }
 
 void jeuContreOrdinateur() {
-    char grille[ROWS][COLS];
+    int grille[ROWS][COLS];
     int joueur = 1;
     int colonne;
     int niveau;
@@ -166,10 +168,10 @@ void jeuContreOrdinateur() {
         }
 
         // Ajouter le pion dans la colonne choisie
-        ajouterPion(grille, colonne, (joueur == 1) ? 'X' : 'O');
+        ajouterPion(grille, colonne, joueur);
 
         // Vérifier si le joueur a gagné
-        if (verifierVictoire(grille, (joueur == 1) ? 'X' : 'O')) {
+        if (verifierVictoire(grille, joueur)) {
             printf("Le joueur %d a gagné!\n", joueur);
             break;
         }
@@ -181,7 +183,6 @@ void jeuContreOrdinateur() {
     // Afficher la grille finale
     afficherGrille(grille);
 }
-
 
 int main() {
     interface();

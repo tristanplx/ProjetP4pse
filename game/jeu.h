@@ -4,13 +4,13 @@
 #define ROWS 6
 #define COLS 7
 
-void afficherGrille(char grille[ROWS][COLS]);
-void initialiserGrille(char grille[ROWS][COLS]);
-void ajouterPion(char grille[ROWS][COLS], int colonne, char pion);
+void afficherGrille(int grille[ROWS][COLS]);
+void initialiserGrille(int grille[ROWS][COLS]);
+void ajouterPion(int grille[ROWS][COLS], int colonne, int pion);
 void jeuContreOrdinateur();
 void jeu();
 void interface();
-bool verifierVictoire(char grille[ROWS][COLS], char pion);
+bool verifierVictoire(int grille[ROWS][COLS], int pion);
 
 
 
