@@ -184,7 +184,18 @@ void jeuContreOrdinateur() {
     afficherGrille(grille);
 }
 
+bool grillePleine(int grille[ROWS][COLS]) {
+    for (int j = 0; j < COLS; j++) {
+        if (grille[0][j] == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
 int main() {
     interface();
     return 0;
 }
+
+

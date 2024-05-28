@@ -11,6 +11,7 @@ void jeuContreOrdinateur();
 void jeu();
 void interface();
 bool verifierVictoire(int grille[ROWS][COLS], int pion);
+bool grillePleine(int grille[ROWS][COLS]);
 
 
 
