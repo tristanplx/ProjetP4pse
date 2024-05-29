@@ -1,48 +1,100 @@
-#include "pse.h"
+#include "../include/pse.h"
+#include "../game/jeu.h"
+#include "../ordinateur/ordinateur.h"
+#include "client.h"
 
-#define BUFFER_SIZE 1024
+#define CMD   "client"
+#define ROWS 6
+#define COLS 7
+
+
+int jouerRobot(int grille[ROWS][COLS], int niveau);
 
 int main(int argc, char *argv[]) {
-  if (argc != 3) {
-    fprintf(stderr, "usage: %s hostname port\n", argv[0]);
-    exit(EXIT_FAILURE);
-  }
+    int sock, ret;
+    struct sockaddr_in *adrServ;
+    int fin = FAUX;
+    char buffer[1024];
+    int grille[ROWS][COLS];
+    int term, niv_bot = 0;
 
-  int sock = 0;
-  struct sockaddr_in serv_addr;
-  char buffer[BUFFER_SIZE] = {0};
-  int port = atoi(argv[2]);
+    if (argc != 3)
+        erreur("usage: %s machine port\n", argv[0]);
 
-  sock = socket(AF_INET, SOCK_STREAM, 0);
-  if (sock < 0) {
-    perror("socket failed");
-    exit(EXIT_FAILURE);
-  }
+    printf("%s: creating a socket\n", CMD);
+    sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock < 0)
+        erreur_IO("socket");
 
-  serv_addr.sin_family = AF_INET;
-  serv_addr.sin_port = htons(port);
+    printf("%s: DNS resolving for %s, port %s\n", CMD, argv[1], argv[2]);
+    adrServ = resolv(argv[1], argv[2]);
+    if (adrServ == NULL)
+        erreur("adresse %s port %s inconnus\n", argv[1], argv[2]);
 
-  if (inet_pton(AF_INET, argv[1], &serv_addr.sin_addr) <= 0) {
-    perror("Invalid address/ Address not supported");
-    close(sock);
-    exit(EXIT_FAILURE);
-  }
+    printf("%s: adr %s, port %hu\n", CMD,
+           stringIP(ntohl(adrServ->sin_addr.s_addr)),
+           ntohs(adrServ->sin_port));
 
-  if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
-    perror("Connection Failed");
-    close(sock);
-    exit(EXIT_FAILURE);
-  }
+    printf("%s: connecting the socket\n", CMD);
+    ret = connect(sock, (struct sockaddr *)adrServ, sizeof(struct sockaddr_in));
+    if (ret < 0)
+        erreur_IO("connect");
 
-  printf("Connecté au serveur %s sur le port %d.\n", argv[1], port);
-  printf("Entrez un entier : ");
-  while (fgets(buffer, BUFFER_SIZE, stdin) != NULL) {
-    send(sock, buffer, strlen(buffer), 0);
-    printf("Entrez un entier : ");
-    memset(buffer, 0, BUFFER_SIZE);
-  }
+    // Recevoir le choix du mode de jeu et le niveau du bot si applicable
+    ret = read(sock, buffer, sizeof(buffer)); // Lire le message du serveur demandant le mode de jeu
+    if (ret <= 0)
+        erreur_IO("read mode de jeu");
+    printf("%s", buffer);
+    scanf("%d", &term);
+    write(sock, &term, sizeof(term)); // Envoyer le mode de jeu au serveur
 
-  close(sock);
-  return 0;
+    if (term == 2) {
+        ret = read(sock, buffer, sizeof(buffer)); // Lire le message du serveur demandant le niveau du bot
+        if (ret <= 0)
+            erreur_IO("read niveau bot");
+        printf("%s", buffer);
+        scanf("%d", &niv_bot);
+        write(sock, &niv_bot, sizeof(niv_bot)); // Envoyer le niveau du bot au serveur
+    }
+
+    while (!fin) {
+        // Recevoir l'état de la grille du serveur
+        ret = read(sock, grille, sizeof(grille));
+        if (ret <= 0)
+            erreur_IO("read grille");
+
+        afficherGrille(grille);
+
+        if (term == 2) { // Si c'est un bot
+            int colonne = jouerRobot(grille, niv_bot);
+            ret = write(sock, &colonne, sizeof(colonne)); // Envoyer la colonne choisie par le bot
+        } else { // Si c'est un humain
+            printf("Choisissez une colonne (1-%d) : ", COLS);
+            if (fgets(buffer, sizeof(buffer), stdin) == NULL)
+                erreur("saisie fin de fichier\n");
+
+            int colonne = atoi(buffer) - 1; // Conversion de la colonne en entier
+            ret = write(sock, &colonne, sizeof(colonne)); // Envoyer la colonne choisie par l'humain
+        }
+
+        if (ret == -1)
+            erreur_IO("ecrire colonne");
+
+        // Recevoir le signal de fin de jeu
+        ret = read(sock, buffer, sizeof(buffer));
+        if (ret <= 0)
+            erreur_IO("read fin");
+
+        if (strcmp(buffer, "fin") == 0)
+            fin = VRAI;
+    }
+
+    if (close(sock) == -1)
+        erreur_IO("close socket");
+
+    exit(EXIT_SUCCESS);
 }
 
+int jouerRobot(int grille[ROWS][COLS], int niveau) {
+    return meilleurCoup(grille, niveau);
+}

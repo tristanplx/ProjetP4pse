@@ -193,9 +193,10 @@ bool grillePleine(int grille[ROWS][COLS]) {
     return true;
 }
 
+/*
 int main() {
     interface();
     return 0;
 }
-
+*/
 

@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "ordinateur.h": "c"
+        "ordinateur.h": "c",
+        "pse.h": "c",
+        "serveur.h": "c"
     }
 }

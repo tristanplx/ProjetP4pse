@@ -1,5 +1,6 @@
 #ifndef JEU_H
 #define JEU_H
+#include <stdbool.h>
 
 #define ROWS 6
 #define COLS 7
