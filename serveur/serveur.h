@@ -7,7 +7,7 @@
 #define ROWS 6
 #define COLS 7
 
-void sessionClient(int canal1,int canal2, int grille[ROWS][COLS], int type_jeu, int niv_bot1, int niv_bot2);
+void sessionClient(int canal1,int canal2, int grille[ROWS][COLS], int tailleGrille, int type_jeu, int niv_bot1, int niv_bot2);
 
 
 #endif // SERVEUR_H

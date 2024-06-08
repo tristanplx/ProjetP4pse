@@ -104,9 +104,9 @@ int main(int argc, char *argv[]) {
       printf("Mode de jeu invalide.\n");
       exit(EXIT_FAILURE);
     }
-
+    printf("type_jeu : %d\n", type_jeu);
     initialiserGrille(GRILLE);
-    sessionClient(canal1, canal2, GRILLE, type_jeu, niv_bot1, niv_bot2);
+    sessionClient(canal1, canal2, GRILLE,sizeof(GRILLE), type_jeu, niv_bot1, niv_bot2);
     printf("Partie terminée.\n");
     if (close(canal1) == -1)
       erreur_IO("close canal1");
@@ -118,14 +118,16 @@ int main(int argc, char *argv[]) {
   }
 }
 
-void sessionClient(int canal1,int canal2, int grille[ROWS][COLS], int type_jeu, int niv_bot1, int niv_bot2){
+void sessionClient(int canal1,int canal2, int grille[ROWS][COLS], int tailleGrille, int type_jeu, int niv_bot1, int niv_bot2){
   int fin = FAUX;
   int colonne=0;
 
   while (!fin) {
+    printf("entree while\n ");
     afficherGrille(grille);
-    write(canal1, "C'est votre tour !\n", 19);
-    write(canal1, grille, sizeof(*grille));
+    printf("avant write");
+    write(canal1, grille, tailleGrille);
+    printf("apres write");
     read(canal1, &colonne, sizeof(colonne));
     colonne --;
     printf("colonne : %d\n", colonne);

@@ -61,8 +61,8 @@ int main(int argc, char *argv[]) {
         int numColonne;
         printf("Attente de l'adversaire...\n");
         // Recevoir l'état de la grille du serveur
-        read(sock, buffer, sizeof(buffer));
-        ret = read(sock, grille, sizeof(grille));
+        ret = read(sock, &grille, sizeof(grille));
+        printf("j ai lu");
         if (ret <= 0)
             erreur_IO("read grille");
 
