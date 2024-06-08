@@ -2,7 +2,6 @@
 #include "../game/jeu.h"
 #include "../ordinateur/ordinateur.h"
 #include "serveur.h"
-#include "../Makefile.inc"
 
 #define   CMD         "serveur"
 #define   NB_WORKERS  2
@@ -170,101 +169,6 @@ void sessionClient(int canal1,int canal2, int grille[ROWS][COLS], int type_jeu, 
     }
   }
 }
-
-/*
-    } else if (type_jeu == 2) {
-      // Humain vs Robot
-      afficherGrille(grille);
-      write(canal1, "C'est votre tour !\n", 19);
-      colonne = read(canal1, &colonne, sizeof(colonne));
-      colonne --;
-      ajouterPion(grille, colonne, JOUEUR_1);
-
-      fin = verifierVictoire(grille, JOUEUR_1);
-
-      if (fin) {
-        write(canal1, "Vous avez gagné !\n", 19);
-        write(canal2, "Vous avez perdu !\n", 18);
-        break;
-      }
-
-      fin = grillePleine(grille);
-
-      if (fin) {
-        write(canal1, "Match nul !\n", 12);
-        write(canal2, "Match nul !\n", 12);
-        break;
-      }
-
-      afficherGrille(grille);
-      write(canal2, "C'est au tour du bot !\n", 24);
-      colonne = meilleurCoup(grille, niv_bot2);
-      ajouterPion(grille, colonne, JOUEUR_2);
-
-      fin = verifierVictoire(grille, JOUEUR_2);
-
-      if (fin) {
-        write(canal2, "Vous avez gagné !\n", 19);
-        write(canal1, "Vous avez perdu !\n", 18);
-        break;
-      }
-
-      fin = grillePleine(grille);
-
-      if (fin) {
-        write(canal1, "Match nul !\n", 12);
-        write(canal2, "Match nul !\n", 12);
-        break;
-      }
-      
-    } else if (type_jeu == 3) {
-      // Robot vs Robot
-      afficherGrille(grille);
-      write(canal1, "C'est au tour du bot 1 !\n", 26);
-      colonne = meilleurCoup(grille, niv_bot1);
-      ajouterPion(grille, colonne, JOUEUR_1);
-
-      fin = verifierVictoire(grille, JOUEUR_1);
-
-      if (fin) {
-        write(canal1, "Vous avez gagné !\n", 19);
-        write(canal2, "Vous avez perdu !\n", 18);
-        break;
-      }
-
-      fin = grillePleine(grille);
-
-      if (fin) {
-        write(canal1, "Match nul !\n", 12);
-        write(canal2, "Match nul !\n", 12);
-        break;
-      }
-
-      afficherGrille(grille);
-      write(canal2, "C'est au tour du bot 2 !\n", 26);
-      colonne = meilleurCoup(grille, niv_bot2);
-      ajouterPion(grille, colonne, JOUEUR_2);
-
-      fin = verifierVictoire(grille, JOUEUR_2);
-
-      if (fin) {
-        write(canal2, "Vous avez gagné !\n", 19);
-        write(canal1, "Vous avez perdu !\n", 18);
-        break;
-      }
-
-      fin = grillePleine(grille);
-
-      if (fin) {
-        write(canal1, "Match nul !\n", 12);
-        write(canal2, "Match nul !\n", 12);
-        break;
-      }
-    }
-  }
-
-*/
-
 
 
 
