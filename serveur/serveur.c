@@ -107,7 +107,7 @@ int main(int argc, char *argv[]) {
 
     initialiserGrille(GRILLE);
     sessionClient(canal1, canal2, GRILLE, type_jeu, niv_bot1, niv_bot2);
-
+    printf("Partie terminée.\n");
     if (close(canal1) == -1)
       erreur_IO("close canal1");
     
@@ -120,13 +120,15 @@ int main(int argc, char *argv[]) {
 
 void sessionClient(int canal1,int canal2, int grille[ROWS][COLS], int type_jeu, int niv_bot1, int niv_bot2){
   int fin = FAUX;
-  int colonne;
+  int colonne=0;
 
   while (!fin) {
     afficherGrille(grille);
     write(canal1, "C'est votre tour !\n", 19);
-    colonne = read(canal1, &colonne, sizeof(colonne));
+    write(canal1, grille, sizeof(*grille));
+    read(canal1, &colonne, sizeof(colonne));
     colonne --;
+    printf("colonne : %d\n", colonne);
     ajouterPion(grille, colonne, JOUEUR_1);
 
     fin = verifierVictoire(grille, JOUEUR_1);
@@ -147,7 +149,7 @@ void sessionClient(int canal1,int canal2, int grille[ROWS][COLS], int type_jeu, 
 
     afficherGrille(grille);
     write(canal2, "C'est votre tour !\n", 19);
-    colonne = read(canal2, &colonne, sizeof(colonne));
+    read(canal2, &colonne, sizeof(colonne));
     colonne --;
     
     ajouterPion(grille, colonne, JOUEUR_2);

@@ -58,7 +58,10 @@ int main(int argc, char *argv[]) {
     }
 
     while (!fin) {
+        int numColonne;
+        printf("Attente de l'adversaire...\n");
         // Recevoir l'état de la grille du serveur
+        read(sock, buffer, sizeof(buffer));
         ret = read(sock, grille, sizeof(grille));
         if (ret <= 0)
             erreur_IO("read grille");
@@ -69,12 +72,12 @@ int main(int argc, char *argv[]) {
             int colonne = jouerRobot(grille, niv_bot);
             ret = write(sock, &colonne, sizeof(colonne)); // Envoyer la colonne choisie par le bot
         } else { // Si c'est un humain
-            printf("Choisissez une colonne (1-%d) : ", COLS);
+            printf("Choisissez une colonne (1-%d) : \n", COLS);
+            scanf("%d", &numColonne);
+            numColonne--; // Conversion de la colonne en entier
+            ret = write(sock, &numColonne, sizeof(numColonne)); // Envoyer la colonne choisie par l'humain
             if (fgets(buffer, sizeof(buffer), stdin) == NULL)
                 erreur("saisie fin de fichier\n");
-
-            int colonne = atoi(buffer) - 1; // Conversion de la colonne en entier
-            ret = write(sock, &colonne, sizeof(colonne)); // Envoyer la colonne choisie par l'humain
         }
 
         if (ret == -1)
