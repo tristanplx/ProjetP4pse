@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
     printf("%s: client1 connected\n", CMD);
 
     int term1;
-    int niv_bot1 = 0; // Niveau du bot de 1 à 3
+    int niv_bot1 = 0; // Niveau du bot de 0 à 3
 
     // Demander le mode de jeu pour le joueur 1
     write(canal1, "Choisissez le mode de jeu (1: classique, 2: robot): ", 53);
@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
 
 
     if (term1 == 2) {
-      write(canal1, "Choisissez le niveau du bot (1: facile, 2: moyen, 3: difficile): ", 66);
+      write(canal1, "Choisissez le niveau du bot (0: facile, 1: modéré, 2: difficile, 3: expert): ", 79);
       ret = read(canal1, &niv_bot1, sizeof(niv_bot1));
       if (ret <= 0)
           erreur_IO("read niv_bot1");
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
     printf("%s: client2 connected\n", CMD);
 
     int term2;
-    int niv_bot2 = 0; // Niveau du bot de 1 à 3
+    int niv_bot2 = 0; // Niveau du bot de 0 à 3
 
     // Demander le mode de jeu pour le joueur 2
     write(canal2, "Choisissez le mode de jeu (1: classique, 2: robot): ", 53);
@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
         erreur_IO("read term2");
 
     if (term2 == 2) {
-      write(canal2, "Choisissez le niveau du bot (1: facile, 2: moyen, 3: difficile): ", 66);
+      write(canal2, "Choisissez le niveau du bot (0: facile, 1: modéré, 2: difficile, 3: expert): ", 79);
       ret = read(canal2, &niv_bot2, sizeof(niv_bot2));
       if (ret <= 0)
           erreur_IO("read niv_bot2");
@@ -107,10 +107,20 @@ int main(int argc, char *argv[]) {
     printf("type_jeu : %d\n", type_jeu);
     initialiserGrille(GRILLE);
 
-
-    sessionClient(canal1, canal2, GRILLE,sizeof(GRILLE), type_jeu, niv_bot1, niv_bot2);
-
-    printf("Partie terminée.\n");
+    int choix = 1;
+    while(choix == 1){
+      initialiserGrille(GRILLE);
+      sessionClient(canal1, canal2, GRILLE,sizeof(GRILLE), type_jeu, niv_bot1, niv_bot2);
+      printf("Partie terminée.\n");
+      printf("\n\n---------------------------\n\n");
+      printf("Nouvelle partie ? (1: oui, 2: non) : ");
+      scanf("%d", &choix);
+      while(choix != 1 && choix != 2){
+        printf("Choix invalide. Veuillez choisir 1 ou 2.\n");
+        printf("Nouvelle partie ? (1: oui, 2: non) : ");
+        scanf("%d", &choix);
+      }
+    }
     if (close(canal1) == -1)
       erreur_IO("close canal1");
     
@@ -126,22 +136,24 @@ void sessionClient(int canal1,int canal2, int grille[ROWS][COLS], int tailleGril
   int colonne=0;
 
   while (!fin) {
-    printf("entree while\n");
+    printf("\n---------------------------\n\n");
     afficherGrille(grille);
-    printf("avant write\n");
+    printf("\n---------------------------\n");
     write(canal1, grille, tailleGrille);
-    printf("apres write\n");
     read(canal1, &colonne, sizeof(colonne));
+    printf("\n\nLe joueur client1 a joué la colonne: %d\n\n", colonne);
     colonne --;
-    printf("colonne : %d\n", colonne);
     ajouterPion(grille, colonne, JOUEUR_1);
+    afficherGrille(grille);
 
     write(canal1, grille, tailleGrille);
 
     fin = verifierVictoire(grille, JOUEUR_1);
 
     if (fin) {
+      printf("\n---------------------------\n\n");
       afficherGrille(grille);
+      printf("\n---------------------------\n\n");
       write(canal2, grille, tailleGrille);
       break;
     }
@@ -149,26 +161,28 @@ void sessionClient(int canal1,int canal2, int grille[ROWS][COLS], int tailleGril
     fin = grillePleine(grille);
 
     if (fin) {
+      printf("\n---------------------------\n\n");
       afficherGrille(grille);
+      printf("\n---------------------------\n\n");
       write(canal2, grille, tailleGrille);
       break;
     }
 
-    afficherGrille(grille);
-    printf("avant write canal2\n");
     write(canal2, grille, tailleGrille);
-    printf("apres write canal2\n");
+    printf("\n---------------------------\n");
     read(canal2, &colonne, sizeof(colonne));
+    printf("\n\nLe joueur client2 a joué la colonne: %d\n\n", colonne);
     colonne --;
-    
     ajouterPion(grille, colonne, JOUEUR_2);
-
+    afficherGrille(grille);
     write(canal2, grille, tailleGrille);
 
     fin = verifierVictoire(grille, JOUEUR_2);
 
     if (fin) {
+      printf("\n---------------------------\n\n");
       afficherGrille(grille);
+      printf("\n---------------------------\n\n");
       write(canal1, grille, tailleGrille);
       break;
     }
@@ -176,12 +190,15 @@ void sessionClient(int canal1,int canal2, int grille[ROWS][COLS], int tailleGril
     fin = grillePleine(grille);
 
     if (fin) {
+      printf("\n---------------------------\n\n");
       afficherGrille(grille);
+      printf("\n---------------------------\n\n");
       write(canal1, grille, tailleGrille);
       break;
     }
   }
 }
+
 
 
 

@@ -6,5 +6,6 @@
 #define ROWS 6
 #define COLS 7
 
+void jouer(int sock, int term, int niv_bot);
 
 #endif /* CLIENT_H */
