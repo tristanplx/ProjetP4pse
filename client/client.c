@@ -61,8 +61,9 @@ int main(int argc, char *argv[]) {
         int numColonne;
         printf("Attente de l'adversaire...\n");
         // Recevoir l'état de la grille du serveur
+        printf("avant recevoir grille\n");
         ret = read(sock, &grille, sizeof(grille));
-        printf("j ai lu");
+        printf("apres recevoir grille\n");
         if (ret <= 0)
             erreur_IO("read grille");
 
@@ -74,7 +75,6 @@ int main(int argc, char *argv[]) {
         } else { // Si c'est un humain
             printf("Choisissez une colonne (1-%d) : \n", COLS);
             scanf("%d", &numColonne);
-            numColonne--; // Conversion de la colonne en entier
             ret = write(sock, &numColonne, sizeof(numColonne)); // Envoyer la colonne choisie par l'humain
             if (fgets(buffer, sizeof(buffer), stdin) == NULL)
                 erreur("saisie fin de fichier\n");
@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
             erreur_IO("ecrire colonne");
 
         // Recevoir le signal de fin de jeu
-        ret = read(sock, buffer, sizeof(buffer));
+        //ret = read(sock, buffer, sizeof(buffer));
         if (ret <= 0)
             erreur_IO("read fin");
 

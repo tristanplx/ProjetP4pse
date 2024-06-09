@@ -123,11 +123,11 @@ void sessionClient(int canal1,int canal2, int grille[ROWS][COLS], int tailleGril
   int colonne=0;
 
   while (!fin) {
-    printf("entree while\n ");
+    printf("entree while\n");
     afficherGrille(grille);
-    printf("avant write");
+    printf("avant write\n");
     write(canal1, grille, tailleGrille);
-    printf("apres write");
+    printf("apres write\n");
     read(canal1, &colonne, sizeof(colonne));
     colonne --;
     printf("colonne : %d\n", colonne);
@@ -150,7 +150,9 @@ void sessionClient(int canal1,int canal2, int grille[ROWS][COLS], int tailleGril
     }
 
     afficherGrille(grille);
-    write(canal2, "C'est votre tour !\n", 19);
+    printf("avant write canal2\n");
+    write(canal2, grille, tailleGrille);
+    printf("apres write canal2\n");
     read(canal2, &colonne, sizeof(colonne));
     colonne --;
     
