@@ -58,44 +58,68 @@ int main(int argc, char *argv[]) {
     }
 
     while (!fin) {
+
         int numColonne;
+
         printf("Attente de l'adversaire...\n");
         // Recevoir l'état de la grille du serveur
         printf("avant recevoir grille\n");
-        ret = read(sock, &grille, sizeof(grille));
+        read(sock, &grille, sizeof(grille));
         printf("apres recevoir grille\n");
-        if (ret <= 0)
-            erreur_IO("read grille");
-
         afficherGrille(grille);
+
+
+        if (grillePleine(grille)) {
+            printf("La grille est pleine, match nul !\n");
+            fin = VRAI;
+            break;
+        }
+
+        if (verifierVictoire(grille, 1)) {
+            printf("Vous avez perdu!\n");
+            fin = VRAI;
+            break;
+        }
+
+        if (verifierVictoire(grille, 2)) {
+            printf("Vous avez perdu!\n");
+            fin = VRAI;
+            break;
+        }
 
         if (term == 2) { // Si c'est un bot
             int colonne = jouerRobot(grille, niv_bot);
             ret = write(sock, &colonne, sizeof(colonne)); // Envoyer la colonne choisie par le bot
         } else { // Si c'est un humain
-            printf("Choisissez une colonne (1-%d) : \n", COLS);
+            printf("Choisissez une colonne (1-7) : \n");
             scanf("%d", &numColonne);
             ret = write(sock, &numColonne, sizeof(numColonne)); // Envoyer la colonne choisie par l'humain
-            if (fgets(buffer, sizeof(buffer), stdin) == NULL)
-                erreur("saisie fin de fichier\n");
         }
 
-        if (ret == -1)
-            erreur_IO("ecrire colonne");
+        printf("Le coup que vous avez joué est:\n");
+        read(sock, &grille, sizeof(grille));
+        afficherGrille(grille);
 
-        // Recevoir le signal de fin de jeu
-        //ret = read(sock, buffer, sizeof(buffer));
-        if (ret <= 0)
-            erreur_IO("read fin");
-
-        if (strcmp(buffer, "fin") == 0)
+        if (verifierVictoire(grille, 1)) {
+            printf("Vous avez gagné!\n");
             fin = VRAI;
+            break;
+        }
+
+        if (verifierVictoire(grille, 2)) {
+            printf("Vous avez gagné!\n");
+            fin = VRAI;
+            break;
+        }
+
+        if (grillePleine(grille)) {
+            printf("La grille est pleine, match nul !\n");
+            fin = VRAI;
+            break;
+        }
+
     }
 
-    if (close(sock) == -1)
-        erreur_IO("close socket");
-
-    exit(EXIT_SUCCESS);
 }
 
 int jouerRobot(int grille[ROWS][COLS], int niveau) {

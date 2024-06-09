@@ -106,7 +106,10 @@ int main(int argc, char *argv[]) {
     }
     printf("type_jeu : %d\n", type_jeu);
     initialiserGrille(GRILLE);
+
+
     sessionClient(canal1, canal2, GRILLE,sizeof(GRILLE), type_jeu, niv_bot1, niv_bot2);
+
     printf("Partie terminée.\n");
     if (close(canal1) == -1)
       erreur_IO("close canal1");
@@ -133,19 +136,21 @@ void sessionClient(int canal1,int canal2, int grille[ROWS][COLS], int tailleGril
     printf("colonne : %d\n", colonne);
     ajouterPion(grille, colonne, JOUEUR_1);
 
+    write(canal1, grille, tailleGrille);
+
     fin = verifierVictoire(grille, JOUEUR_1);
-  
+
     if (fin) {
-      write(canal1, "Vous avez gagné !\n", 19);
-      write(canal2, "Vous avez perdu !\n", 18);
+      afficherGrille(grille);
+      write(canal2, grille, tailleGrille);
       break;
     }
 
     fin = grillePleine(grille);
 
     if (fin) {
-      write(canal1, "Match nul !\n", 12);
-      write(canal2, "Match nul !\n", 12);
+      afficherGrille(grille);
+      write(canal2, grille, tailleGrille);
       break;
     }
 
@@ -158,19 +163,21 @@ void sessionClient(int canal1,int canal2, int grille[ROWS][COLS], int tailleGril
     
     ajouterPion(grille, colonne, JOUEUR_2);
 
+    write(canal2, grille, tailleGrille);
+
     fin = verifierVictoire(grille, JOUEUR_2);
 
     if (fin) {
-      write(canal2, "Vous avez gagné !\n", 19);
-      write(canal1, "Vous avez perdu !\n", 18);
+      afficherGrille(grille);
+      write(canal1, grille, tailleGrille);
       break;
     }
 
     fin = grillePleine(grille);
 
     if (fin) {
-      write(canal1, "Match nul !\n", 12);
-      write(canal2, "Match nul !\n", 12);
+      afficherGrille(grille);
+      write(canal1, grille, tailleGrille);
       break;
     }
   }
