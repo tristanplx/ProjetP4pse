@@ -8,6 +8,6 @@
 #define COLS 7
 
 void sessionClient(int canal1,int canal2, int grille[ROWS][COLS], int tailleGrille, int type_jeu, int niv_bot1, int niv_bot2);
-
+int changerModeJeu(int canal1, int canal2, int *term1, int *niv_bot1, int *term2, int *niv_bot2);
 
 #endif // SERVEUR_H

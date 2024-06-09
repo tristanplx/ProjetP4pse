@@ -7,14 +7,12 @@
 #define ROWS 6
 #define COLS 7
 
-
 int jouerRobot(int grille[ROWS][COLS], int niveau);
+
 
 int main(int argc, char *argv[]) {
     int sock, ret;
     struct sockaddr_in *adrServ;
-    char buffer[1024];
-    int term = 0, niv_bot = 0;
 
     if (argc != 3)
         erreur("usage: %s machine port\n", argv[0]);
@@ -38,16 +36,33 @@ int main(int argc, char *argv[]) {
     if (ret < 0)
         erreur_IO("connect");
 
-    ret = read(sock, buffer, sizeof(buffer)); // Lire le message du serveur demandant le mode de jeu
+    while (1) {
+        int term, niv_bot;
+        choisirModeDeJeu(sock, &term, &niv_bot);
+        jouer(sock, term, niv_bot);
+
+        printf("Partie terminée, aller dans le terminal serveur pour relancer une partie.\n");
+        printf("---------------------------\n");
+        }
+
+    return 0;
+}
+
+void choisirModeDeJeu(int sock, int *term, int *niv_bot) {
+    char buffer[1024];
+    int ret;
+
+    // Recevoir le choix du mode de jeu
     while (true) {
+        ret = read(sock, buffer, sizeof(buffer)); // Lire le message du serveur demandant le mode de jeu
         if (ret <= 0)
             erreur_IO("read mode de jeu");
         printf("\n\n---------------------------\n\n");
         printf("%s", buffer);
         printf("\n\n---------------------------\n\n");
-        scanf("%d", &term);
-        if (term == 1 || term == 2) {
-            write(sock, &term, sizeof(term)); // Envoyer le mode de jeu au serveur
+        scanf("%d", term);
+        if (*term == 1 || *term == 2) {
+            write(sock, term, sizeof(*term)); // Envoyer le mode de jeu au serveur
             break;
         } else {
             printf("Mode de jeu invalide, veuillez entrer 1 ou 2.\n");
@@ -55,26 +70,22 @@ int main(int argc, char *argv[]) {
     }
 
     // Recevoir le niveau du bot si applicable
-    if (term == 2) {
-        ret = read(sock, buffer, sizeof(buffer)); // Lire le message du serveur demandant le niveau du bot
+    if (*term == 2) {
         while (true) {
+            ret = read(sock, buffer, sizeof(buffer)); // Lire le message du serveur demandant le niveau du bot
             if (ret <= 0)
                 erreur_IO("read niveau bot");
+            printf("\n\n---------------------------\n\n");
             printf("%s", buffer);
-            scanf("%d", &niv_bot);
-            if (niv_bot >= 1 && niv_bot <= 3) {
-                write(sock, &niv_bot, sizeof(niv_bot)); // Envoyer le niveau du bot au serveur
+            scanf("%d", niv_bot);
+            if (*niv_bot >= 1 && *niv_bot <= 3) {
+                write(sock, niv_bot, sizeof(*niv_bot)); // Envoyer le niveau du bot au serveur
                 break;
             } else {
                 printf("Niveau du bot invalide, veuillez entrer une valeur à nouveau.\n");
             }
         }
     }
-    while(1){
-        jouer(sock, term, niv_bot);
-    }
-
-    return 0;
 }
 
 void jouer(int sock, int term, int niv_bot) {
@@ -117,8 +128,26 @@ void jouer(int sock, int term, int niv_bot) {
             colonne++;
             ret = write(sock, &colonne, sizeof(colonne)); // Envoyer la colonne choisie par le bot
         } else { // Si c'est un humain
-            printf("\n---------------------------\n\nChoisissez une colonne (1-7) : \n");
-            scanf("%d", &numColonne);
+            do {
+                printf("\n---------------------------\n\nChoisissez une colonne (1-7) : \n");
+                printf("\n---------------------------\n\n");
+                scanf("%d", &numColonne);
+
+                if (numColonne < 1 || numColonne > 7) {
+                    printf("Choix invalide. Veuillez entrer un chiffre entre 1 et 7.\n");
+                    numColonne = -1; // Réinitialiser pour rester dans la boucle
+                }
+
+                numColonne--; // Convertir de l'index 1 à l'index 0
+
+                if (grille[0][numColonne] != 0) {
+                    printf("Cette colonne est déjà pleine. Veuillez choisir une autre colonne.\n");
+                    numColonne = -1; // Réinitialiser pour rester dans la boucle
+                }
+            } while (numColonne <= -1);
+
+            numColonne++; // Reconvertir à l'index 1 pour l'envoyer
+
             ret = write(sock, &numColonne, sizeof(numColonne)); // Envoyer la colonne choisie par l'humain
         }
 
