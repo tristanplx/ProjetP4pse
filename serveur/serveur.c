@@ -132,8 +132,6 @@ void sessionClient(int canal1, int canal2, int grille[ROWS][COLS], int tailleGri
     int colonne = 0;
 
     while (!fin) {
-        printf("\n---------------------------\n\n");
-        afficherGrille(grille);
         printf("\n---------------------------\n");
         write(canal1, grille, tailleGrille);
         read(canal1, &colonne, sizeof(colonne));
