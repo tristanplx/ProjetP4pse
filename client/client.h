@@ -7,6 +7,4 @@
 #define COLS 7
 
 
-int jouerRobot(int grille[ROWS][COLS], int col);
-
 #endif /* CLIENT_H */

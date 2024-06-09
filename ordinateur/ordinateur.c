@@ -8,22 +8,6 @@
 #define JOUEUR 1
 #define BOT 2
 
-void initialiserMatrice(int grillePoids[LIGNES][COLONNES]) {
-    int poids[LIGNES][COLONNES] = {
-        {3, 4, 5, 7, 5, 4, 3},
-        {4, 6, 8, 10, 8, 6, 4},
-        {5, 8, 11, 13, 11, 8, 5},
-        {5, 8, 11, 13, 11, 8, 5},
-        {4, 6, 8, 10, 8, 6, 4},
-        {3, 4, 5, 7, 5, 4, 3}
-    };
-
-    for (int i = 0; i < LIGNES; i++) {
-        for (int j = 0; j < COLONNES; j++) {
-            grillePoids[i][j] = poids[i][j];
-        }
-    }
-}
 
 bool estPleine(int grilleJeu[LIGNES][COLONNES], int col) {
     return grilleJeu[0][col] != 0;

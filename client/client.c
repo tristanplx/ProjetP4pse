@@ -88,7 +88,9 @@ int main(int argc, char *argv[]) {
         }
 
         if (term == 2) { // Si c'est un bot
-            int colonne = jouerRobot(grille, niv_bot);
+            int colonne = meilleurCoup(grille, niv_bot);
+            colonne++;
+            printf("Le bot a joué la colonne %d\n", colonne);
             ret = write(sock, &colonne, sizeof(colonne)); // Envoyer la colonne choisie par le bot
         } else { // Si c'est un humain
             printf("Choisissez une colonne (1-7) : \n");
@@ -120,8 +122,4 @@ int main(int argc, char *argv[]) {
 
     }
 
-}
-
-int jouerRobot(int grille[ROWS][COLS], int niveau) {
-    return meilleurCoup(grille, niveau);
 }

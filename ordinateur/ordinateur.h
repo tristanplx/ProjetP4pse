@@ -4,7 +4,6 @@
 #define LIGNES 6
 #define COLONNES 7
 
-void initialiserMatrice(int grillePoids[LIGNES][COLONNES]);
 bool estPleine(int grilleJeu[LIGNES][COLONNES], int col);
 void jouerBot(int grilleJeu[LIGNES][COLONNES], int col);
 void enleverBot(int grilleJeu[LIGNES][COLONNES], int col);
