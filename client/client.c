@@ -103,6 +103,7 @@ void jouer(int sock, int term, int niv_bot) {
         if (ret <= 0)
             erreur_IO("read grille");
         printf("\n");
+        printf("\n---------------------------\n\nLe coup que l'adversaire a joué est:\n\n");
         afficherGrille(grille);
 
         if (grillePleine(grille)) {
