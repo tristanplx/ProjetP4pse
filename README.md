@@ -1,30 +1,35 @@
 # ProjetP4pse
-##Projet Puissance 4
-Ce projet implémente un jeu de Puissance 4 en utilisant des sockets pour permettre la communication entre un serveur et plusieurs clients. Le jeu supporte les modes de jeu Humain vs Humain, Humain vs Robot et Robot vs Robot. Le niveaux des robots est choisie par l'utilisateur.
 
-##Structure du Projet
+## Projet Puissance 4
+
+Ce projet implémente un jeu de Puissance 4 en utilisant des sockets pour permettre la communication entre un serveur et plusieurs clients. Le jeu supporte les modes de jeu Humain vs Humain, Humain vs Robot et Robot vs Robot. Le niveau des robots est choisi par l'utilisateur.
+
+## Structure du Projet
+
 Le projet est composé des fichiers suivants :
 
-serveur.c : Contient le code du serveur qui gère les connexions des clients et orchestre les parties.
-client.c : Contient le code du client qui permet à un utilisateur de se connecter au serveur et de jouer au jeu.
-jeu.c : Contient les fonctions liées à la logique du jeu (initialisation de la grille, vérification des victoires, etc.).
-ordinateur.c : Contient les fonctions utilisées pour le jeu contre un bot, y compris l'algorithme Minimax pour choisir les meilleurs coups.
+- `serveur.c` : Contient le code du serveur qui gère les connexions des clients et orchestre les parties.
+- `client.c` : Contient le code du client qui permet à un utilisateur de se connecter au serveur et de jouer au jeu.
+- `jeu.c` : Contient les fonctions liées à la logique du jeu (initialisation de la grille, vérification des victoires, etc.).
+- `ordinateur.c` : Contient les fonctions utilisées pour le jeu contre un bot, y compris l'algorithme Minimax pour choisir les meilleurs coups.
 
+## Compilation
 
-##Compilation
+Pour compiler ce projet, utilisez `gcc` :
 
-Pour compiler ce projet, utilisez gcc :
-1. Dans un premier terminal serveur, se placer dans le dossier serveur. Pour éxécuter le fichier utiliser:
-   '''
-   make
-   '''
+1. Dans un premier terminal serveur, se placer dans le dossier serveur. Pour exécuter le fichier, utilisez :
 
-Démarrer le serveur
+    ```sh
+    make
+    ```
+
+### Démarrage du serveur
+
 Pour démarrer le serveur, exécutez la commande suivante :
 
-bash
-Copier le code
+```sh
 ./serveur <port>
+
 Où <port> est le numéro de port sur lequel le serveur écoutera les connexions des clients.
 
 Démarrer un client
