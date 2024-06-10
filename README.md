@@ -29,7 +29,7 @@ Pour démarrer le serveur, exécutez la commande suivante :
 
 ```sh
 ./serveur <port>
-
+```
 Où <port> est le numéro de port sur lequel le serveur écoutera les connexions des clients.
 
 Démarrer un client
