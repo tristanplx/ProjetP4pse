@@ -78,7 +78,7 @@ void choisirModeDeJeu(int sock, int *term, int *niv_bot) {
             printf("\n\n---------------------------\n\n");
             printf("%s", buffer);
             scanf("%d", niv_bot);
-            if (*niv_bot >= 1 && *niv_bot <= 3) {
+            if (*niv_bot >= 0 && *niv_bot <= 3) {
                 write(sock, niv_bot, sizeof(*niv_bot)); // Envoyer le niveau du bot au serveur
                 break;
             } else {
