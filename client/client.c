@@ -52,9 +52,9 @@ void choisirModeDeJeu(int sock, int *term, int *niv_bot) {
     char buffer[1024];
     int ret;
 
-    // Recevoir le choix du mode de jeu
+    ret = read(sock, buffer, sizeof(buffer)); // Lire le message du serveur demandant le mode de jeu// Recevoir le choix du mode de jeu
+    
     while (true) {
-        ret = read(sock, buffer, sizeof(buffer)); // Lire le message du serveur demandant le mode de jeu
         if (ret <= 0)
             erreur_IO("read mode de jeu");
         printf("\n\n---------------------------\n\n");
@@ -71,8 +71,8 @@ void choisirModeDeJeu(int sock, int *term, int *niv_bot) {
 
     // Recevoir le niveau du bot si applicable
     if (*term == 2) {
+        ret = read(sock, buffer, sizeof(buffer)); // Lire le message du serveur demandant le niveau du bot
         while (true) { // oblige le joueur à choisir un niveau de bot valide
-            ret = read(sock, buffer, sizeof(buffer)); // Lire le message du serveur demandant le niveau du bot
             if (ret <= 0)
                 erreur_IO("read niveau bot");
             printf("\n\n---------------------------\n\n");
