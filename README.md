@@ -63,6 +63,7 @@ Pour compiler ce projet, utilisez `gcc` :
     ```sh
     make
     ```
+3. L'application gère plusieurs partie simultanément, répéter l'étape 2 pour lancer d'autres parties répéter l'étape 2 dans de nouveaux terminaux.
 
 ### Démarrage du serveur
 
@@ -118,6 +119,12 @@ Le jeu vérifie automatiquement les conditions de victoire après chaque coup.
 
 Un client peut choisir de jouer contre un robot. Le robot utilise l'algorithme Minimax pour choisir ses coups. La profondeur de parcours de cet algorithme régit la difficulté du jeu.
 
+### Application client/serveur
+Le jeu est lancé via un terminal serveur serveur et se joue avec deux terinaux clients.
+
+### Multithread
+On peut lancer plusieurs parties en simultanée.
+
 ## Fichiers et Fonctions Clés
 
 ### serveur.c
@@ -125,6 +132,7 @@ Un client peut choisir de jouer contre un robot. Le robot utilise l'algorithme M
 - `main` : Initialisation du serveur, gestion des connexions des clients, et orchestration des parties.
 - `changerModeJeu` : Demande aux clients de choisir le mode de jeu et le niveau du robot si applicable.
 - `sessionClient` : Gère une session de jeu entre deux clients.
+- `handleClient` : Permet de gérer la connection de clients, les attribuants deux à deux à des parties.
 
 ### client.c
 
