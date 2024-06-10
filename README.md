@@ -158,5 +158,6 @@ Un client peut choisir de jouer contre un robot. Le robot utilise l'algorithme M
 ## Auteur
 
 Projet scolaire pour l'école des Mines de Saint-Etienne.  
-Martin RABIER @MartinRabier  
-Tristan Panhelleux @tristanplx
+[Martin RABIER](https://github.com/MartinRabier) @MartinRabier
+[Tristan Panhelleux](https://github.com/tristanplx) @tristanplx
+
