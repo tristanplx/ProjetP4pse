@@ -132,7 +132,7 @@ On peut lancer plusieurs parties en simultanée.
 - `main` : Initialisation du serveur, gestion des connexions des clients, et orchestration des parties.
 - `changerModeJeu` : Demande aux clients de choisir le mode de jeu et le niveau du robot si applicable.
 - `sessionClient` : Gère une session de jeu entre deux clients.
-- `handleClient` : Permet de gérer la connection de clients, les attribuants deux à deux à des parties.
+- `handleClient` : Permet de gérer la connection de clients, les attribuant deux à deux à des parties.
 
 ### client.c
 
