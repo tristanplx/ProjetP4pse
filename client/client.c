@@ -17,26 +17,26 @@ int main(int argc, char *argv[]) {
     if (argc != 3)
         erreur("usage: %s machine port\n", argv[0]);
 
-    printf("%s: creating a socket\n", CMD);
-    sock = socket(AF_INET, SOCK_STREAM, 0);
+    printf("%s: creating a socket\n", CMD); 
+    sock = socket(AF_INET, SOCK_STREAM, 0);//création de la socket
     if (sock < 0)
         erreur_IO("socket");
 
     printf("%s: DNS resolving for %s, port %s\n", CMD, argv[1], argv[2]);
-    adrServ = resolv(argv[1], argv[2]);
+    adrServ = resolv(argv[1], argv[2]); //résolution DNS
     if (adrServ == NULL)
         erreur("adresse %s port %s inconnus\n", argv[1], argv[2]);
 
     printf("%s: adr %s, port %hu\n", CMD,
            stringIP(ntohl(adrServ->sin_addr.s_addr)),
-           ntohs(adrServ->sin_port));
+           ntohs(adrServ->sin_port)); //affichage de l'adresse et du port
 
     printf("%s: connecting the socket\n", CMD);
-    ret = connect(sock, (struct sockaddr *)adrServ, sizeof(struct sockaddr_in));
+    ret = connect(sock, (struct sockaddr *)adrServ, sizeof(struct sockaddr_in)); //connexion au serveur
     if (ret < 0)
         erreur_IO("connect");
 
-    while (1) {
+    while (1) {//boucle pour rejouer
         int term, niv_bot;
         choisirModeDeJeu(sock, &term, &niv_bot);
         jouer(sock, term, niv_bot);
@@ -61,7 +61,7 @@ void choisirModeDeJeu(int sock, int *term, int *niv_bot) {
         printf("%s", buffer);
         printf("\n\n---------------------------\n\n");
         scanf("%d", term);
-        if (*term == 1 || *term == 2) {
+        if (*term == 1 || *term == 2) { // oblige le joueur à choisir un mode de jeu valide
             write(sock, term, sizeof(*term)); // Envoyer le mode de jeu au serveur
             break;
         } else {
@@ -71,7 +71,7 @@ void choisirModeDeJeu(int sock, int *term, int *niv_bot) {
 
     // Recevoir le niveau du bot si applicable
     if (*term == 2) {
-        while (true) {
+        while (true) { // oblige le joueur à choisir un niveau de bot valide
             ret = read(sock, buffer, sizeof(buffer)); // Lire le message du serveur demandant le niveau du bot
             if (ret <= 0)
                 erreur_IO("read niveau bot");
@@ -88,7 +88,7 @@ void choisirModeDeJeu(int sock, int *term, int *niv_bot) {
     }
 }
 
-void jouer(int sock, int term, int niv_bot) {
+void jouer(int sock, int term, int niv_bot) { //fonction qui gère le jeu, relancée lorsque le joueur veut rejouer
     int fin = FAUX;
     int grille[ROWS][COLS];
     int ret;
@@ -126,10 +126,10 @@ void jouer(int sock, int term, int niv_bot) {
 
         if (term == 2) { // Si c'est un bot
             int colonne = meilleurCoup(grille, niv_bot);
-            colonne++;
+            colonne++; //la fonctiono meilleurCoup soustrait déjà 1 donc on ajoute un, le bon calcul sera finalement fait côté serveur
             ret = write(sock, &colonne, sizeof(colonne)); // Envoyer la colonne choisie par le bot
         } else { // Si c'est un humain
-            do {
+            do { //oblige l'utilisateur à choisir une colonne valide
                 printf("\n---------------------------\n\nChoisissez une colonne (1-7) : \n");
                 printf("\n---------------------------\n\n");
                 scanf("%d", &numColonne);

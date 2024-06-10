@@ -9,11 +9,11 @@
 #define BOT 2
 
 
-bool estPleine(int grilleJeu[LIGNES][COLONNES], int col) {
+bool estPleine(int grilleJeu[LIGNES][COLONNES], int col) {//fonction pour vérifier si la colonne est pleine
     return grilleJeu[0][col] != 0;
 }
 
-void jouerBot(int grilleJeu[LIGNES][COLONNES], int col) {
+void jouerBot(int grilleJeu[LIGNES][COLONNES], int col) {//fonction pour faire jouer le bot pour le parcours en profondeur
     int ligne = LIGNES - 1;
     while (ligne >= 0 && grilleJeu[ligne][col] != 0) {
         ligne--;
@@ -23,7 +23,7 @@ void jouerBot(int grilleJeu[LIGNES][COLONNES], int col) {
     }
 }
 
-void enleverBot(int grilleJeu[LIGNES][COLONNES], int col) {
+void enleverBot(int grilleJeu[LIGNES][COLONNES], int col) {//fonction pour enlever le pion du bot utile pour parcours en profondeur minimax
     int ligne = 0;
     while (ligne < LIGNES && grilleJeu[ligne][col] == 0) {
         ligne++;
@@ -33,7 +33,7 @@ void enleverBot(int grilleJeu[LIGNES][COLONNES], int col) {
     }
 }
 
-void jouerJoueur(int grilleJeu[LIGNES][COLONNES], int col) {
+void jouerJoueur(int grilleJeu[LIGNES][COLONNES], int col) {//faire simuler un coup du joueur pour le parcours en profondeur
     int ligne = LIGNES - 1;
     while (ligne >= 0 && grilleJeu[ligne][col] != 0) {
         ligne--;
@@ -43,7 +43,7 @@ void jouerJoueur(int grilleJeu[LIGNES][COLONNES], int col) {
     }
 }
 
-void enleverJoueur(int grilleJeu[LIGNES][COLONNES], int col) {
+void enleverJoueur(int grilleJeu[LIGNES][COLONNES], int col) {//enlever le pion du joueur pour le parcours en profondeur minimax
     int ligne = 0;
     while (ligne < LIGNES && grilleJeu[ligne][col] == 0) {
         ligne++;
@@ -53,13 +53,13 @@ void enleverJoueur(int grilleJeu[LIGNES][COLONNES], int col) {
     }
 }
 
-bool verifierLigne(int a, int b, int c, int d) {
+bool verifierLigne(int a, int b, int c, int d) {//fonction pour vérifier si une ligne est gagnante
     return (a == b && a == c && a == d && a != 0);
 }
 
-bool jeuTermine(int grilleJeu[LIGNES][COLONNES]) {
+bool jeuTermine(int grilleJeu[LIGNES][COLONNES]) {//fonction pour vérifier si le jeu est terminé
     for (int ligne = 0; ligne < LIGNES; ligne++) {
-        for (int col = 0; col < COLONNES - 3; col++) {
+        for (int col = 0; col < COLONNES - 3; col++) {//vérification des lignes
             if (verifierLigne(grilleJeu[ligne][col], grilleJeu[ligne][col + 1], grilleJeu[ligne][col + 2], grilleJeu[ligne][col + 3])) {
                 return true;
             }
@@ -67,7 +67,7 @@ bool jeuTermine(int grilleJeu[LIGNES][COLONNES]) {
     }
 
     for (int ligne = 0; ligne < LIGNES - 3; ligne++) {
-        for (int col = 0; col < COLONNES; col++) {
+        for (int col = 0; col < COLONNES; col++) {//vérification des colonnes
             if (verifierLigne(grilleJeu[ligne][col], grilleJeu[ligne + 1][col], grilleJeu[ligne + 2][col], grilleJeu[ligne + 3][col])) {
                 return true;
             }
@@ -75,7 +75,7 @@ bool jeuTermine(int grilleJeu[LIGNES][COLONNES]) {
     }
 
     for (int ligne = 0; ligne < LIGNES - 3; ligne++) {
-        for (int col = 0; col < COLONNES - 3; col++) {
+        for (int col = 0; col < COLONNES - 3; col++) {//vérification des diagonales sens1
             if (verifierLigne(grilleJeu[ligne][col], grilleJeu[ligne + 1][col + 1], grilleJeu[ligne + 2][col + 2], grilleJeu[ligne + 3][col + 3])) {
                 return true;
             }
@@ -83,14 +83,14 @@ bool jeuTermine(int grilleJeu[LIGNES][COLONNES]) {
     }
 
     for (int ligne = 3; ligne < LIGNES; ligne++) {
-        for (int col = 0; col < COLONNES - 3; col++) {
+        for (int col = 0; col < COLONNES - 3; col++) {//vérification des diagonales sens2
             if (verifierLigne(grilleJeu[ligne][col], grilleJeu[ligne - 1][col + 1], grilleJeu[ligne - 2][col + 2], grilleJeu[ligne - 3][col + 3])) {
                 return true;
             }
         }
     }
 
-    for (int col = 0; col < COLONNES; col++) {
+    for (int col = 0; col < COLONNES; col++) {//vérification si la grille est pleine
         if (!estPleine(grilleJeu, col)) {
             return false;
         }
@@ -99,7 +99,7 @@ bool jeuTermine(int grilleJeu[LIGNES][COLONNES]) {
     return true;
 }
 
-int evaluerPosition(int a, int b, int c, int d) {
+int evaluerPosition(int a, int b, int c, int d) {//fonction pour évaluer la position
     int score = 0;
     int botCount = (a == BOT) + (b == BOT) + (c == BOT) + (d == BOT);
     int joueurCount = (a == JOUEUR) + (b == JOUEUR) + (c == JOUEUR) + (d == JOUEUR);
@@ -123,7 +123,7 @@ int evaluerPosition(int a, int b, int c, int d) {
     return score;
 }
 
-int evaluerScore(int grilleJeu[LIGNES][COLONNES]) {
+int evaluerScore(int grilleJeu[LIGNES][COLONNES]) {//fonction pour évaluer le score en parcourant les cases et utilisant evaluerPosition
     int score = 0;
 
     for (int ligne = 0; ligne < LIGNES; ligne++) {
@@ -153,7 +153,7 @@ int evaluerScore(int grilleJeu[LIGNES][COLONNES]) {
     return score;
 }
 
-int minimax(int grilleJeu[LIGNES][COLONNES], int profondeur, bool estMaximisant) {
+int minimax(int grilleJeu[LIGNES][COLONNES], int profondeur, bool estMaximisant) {//fonction pour parcourir en profondeur, gère le niveau du bot
     if (profondeur == 0 || jeuTermine(grilleJeu)) {
         return evaluerScore(grilleJeu);
     }
@@ -197,7 +197,7 @@ int minimax(int grilleJeu[LIGNES][COLONNES], int profondeur, bool estMaximisant)
     }
 }
 
-int meilleurCoup(int grilleJeu[LIGNES][COLONNES], int profondeur) {
+int meilleurCoup(int grilleJeu[LIGNES][COLONNES], int profondeur) {//fonction pour trouver le meilleur coup pour le bot
     int meilleurCoup = -1;
     int meilleurScore = -9999;
 

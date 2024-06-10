@@ -23,17 +23,17 @@ int main(int argc, char *argv[]) {
     if (argc != 2)
         erreur("usage: %s port\n", argv[0]);
 
-    port = (short)atoi(argv[1]);
+    port = (short)atoi(argv[1]);//conversion du port en entier
 
-    ecoute = socket(AF_INET, SOCK_STREAM, 0);
+    ecoute = socket(AF_INET, SOCK_STREAM, 0);  //création de la socket
     if (ecoute < 0)
         erreur_IO("socket");
 
     adrEcoute.sin_family = AF_INET;
     adrEcoute.sin_addr.s_addr = INADDR_ANY;
     adrEcoute.sin_port = htons(port);
-    printf("%s: binding to INADDR_ANY address on port %d\n", CMD, port);
-    ret = bind(ecoute, (struct sockaddr *)&adrEcoute, sizeof(adrEcoute));
+    printf("%s: binding to INADDR_ANY address on port %d\n", CMD, port);//affichage du port
+    ret = bind(ecoute, (struct sockaddr *)&adrEcoute, sizeof(adrEcoute));//liaison de la socket
     if (ret < 0)
         erreur_IO("bind");
 
@@ -42,14 +42,14 @@ int main(int argc, char *argv[]) {
     if (ret < 0)
         erreur_IO("listen");
 
-    for (int i = 0; i < NB_WORKERS; i++) {
-        canal1 = accept(ecoute, (struct sockaddr *)&adrClient, &lgAdrClient);
+    for (int i = 0; i < NB_WORKERS; i++) {//boucle pour les clients
+        canal1 = accept(ecoute, (struct sockaddr *)&adrClient, &lgAdrClient);//acceptation de la connexion client1
         if (canal1 < 0)
             erreur_IO("accept");
 
         printf("%s: client1 connected\n", CMD);
 
-        canal2 = accept(ecoute, (struct sockaddr *)&adrClient, &lgAdrClient);
+        canal2 = accept(ecoute, (struct sockaddr *)&adrClient, &lgAdrClient);//acceptation de la connexion client2
         if (canal2 < 0)
             erreur_IO("accept");
 
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
         int type_jeu;
 
         int choix = 1;
-        while (choix == 1) {
+        while (choix == 1) { // boucle pour rejouer
             initialiserGrille(GRILLE);
             type_jeu = changerModeJeu(canal1, canal2, &term1, &niv_bot1, &term2, &niv_bot2);
             sessionClient(canal1, canal2, GRILLE, sizeof(GRILLE), type_jeu, niv_bot1, niv_bot2);
@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
 }
 
 
-int changerModeJeu(int canal1, int canal2, int *term1, int *niv_bot1, int *term2, int *niv_bot2) {
+int changerModeJeu(int canal1, int canal2, int *term1, int *niv_bot1, int *term2, int *niv_bot2) {//fonction pour changer le mode de jeu
     int ret;
 
     write(canal1, "Choisissez le mode de jeu (1: classique, 2: robot): ", 53);
@@ -127,24 +127,24 @@ int changerModeJeu(int canal1, int canal2, int *term1, int *niv_bot1, int *term2
     }
 }
 
-void sessionClient(int canal1, int canal2, int grille[ROWS][COLS], int tailleGrille, int type_jeu, int niv_bot1, int niv_bot2) {
+void sessionClient(int canal1, int canal2, int grille[ROWS][COLS], int tailleGrille, int type_jeu, int niv_bot1, int niv_bot2) {//fonction pour gérer la session client
     int fin = FAUX;
     int colonne = 0;
 
     while (!fin) {
         printf("\n---------------------------\n");
-        write(canal1, grille, tailleGrille);
-        read(canal1, &colonne, sizeof(colonne));
+        write(canal1, grille, tailleGrille);//envoi de la grille au client1
+        read(canal1, &colonne, sizeof(colonne));//lecture de la colonne jouée par le client1
         printf("\n\nLe joueur client1 a joué la colonne: %d\n\n", colonne);
         colonne--;
-        ajouterPion(grille, colonne, JOUEUR_1);
+        ajouterPion(grille, colonne, JOUEUR_1);//ajout du pion dans la grille
         afficherGrille(grille);
 
         write(canal1, grille, tailleGrille);
 
-        fin = verifierVictoire(grille, JOUEUR_1);
+        fin = verifierVictoire(grille, JOUEUR_1);//vérification de la victoire
 
-        if (fin) {
+        if (fin) {//si la partie est terminée afficher le gagnant
             printf("\n---------------------------\n\n");
             afficherGrille(grille);
             printf("\n---------------------------\n\n");
@@ -152,9 +152,9 @@ void sessionClient(int canal1, int canal2, int grille[ROWS][COLS], int tailleGri
             break;
         }
 
-        fin = grillePleine(grille);
+        fin = grillePleine(grille);//vérification si la grille est pleine
 
-        if (fin) {
+        if (fin) {//si la grille est pleine afficher match nul
             printf("\n---------------------------\n\n");
             afficherGrille(grille);
             printf("\n---------------------------\n\n");
@@ -162,18 +162,18 @@ void sessionClient(int canal1, int canal2, int grille[ROWS][COLS], int tailleGri
             break;
         }
 
-        write(canal2, grille, tailleGrille);
+        write(canal2, grille, tailleGrille);//envoi de la grille au client2
         printf("\n---------------------------\n");
-        read(canal2, &colonne, sizeof(colonne));
+        read(canal2, &colonne, sizeof(colonne));//lecture de la colonne jouée par le client2
         printf("\n\nLe joueur client2 a joué la colonne: %d\n\n", colonne);
         colonne--;
-        ajouterPion(grille, colonne, JOUEUR_2);
+        ajouterPion(grille, colonne, JOUEUR_2);//ajout du pion dans la grille
         afficherGrille(grille);
         write(canal2, grille, tailleGrille);
 
-        fin = verifierVictoire(grille, JOUEUR_2);
+        fin = verifierVictoire(grille, JOUEUR_2);//vérification de la victoire
 
-        if (fin) {
+        if (fin) {//si la partie est terminée afficher le gagnant
             printf("\n---------------------------\n\n");
             afficherGrille(grille);
             printf("\n---------------------------\n\n");
@@ -183,7 +183,7 @@ void sessionClient(int canal1, int canal2, int grille[ROWS][COLS], int tailleGri
 
         fin = grillePleine(grille);
 
-        if (fin) {
+        if (fin) {//si la grille est pleine afficher match nul
             printf("\n---------------------------\n\n");
             afficherGrille(grille);
             printf("\n---------------------------\n\n");
