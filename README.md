@@ -90,61 +90,72 @@ make
 ```
 Start two clients (in two separate terminals):
 
-sh
-Copier le code
+```sh
 make
 ./client localhost 2000
-Features
-Game Modes
+```
+
+## Features
+
+### Game Modes
 The server asks the clients to choose a game mode (classic or against a robot). If playing against a robot, the client can select its level.
 
-Game Grid
+### Game Grid
 The game grid is displayed and updated after each move.
 
-Win Detection
+### Win Detection
 The game automatically checks for winning conditions after each move.
 
-Robot Mode
+### Robot Mode
 A client can choose to play against a robot. The robot uses the Minimax algorithm to make decisions. The search depth of this algorithm controls the difficulty of the game.
 
-Client/Server Application
+### Client/Server Application
 The game is launched via a server terminal and played with two client terminals.
 
-Multithreading
+### Multithreading
 Multiple games can run simultaneously.
 
-Key Files and Functions
-server.c
-main: Initializes the server, manages client connections, and orchestrates the games.
-changeGameMode: Asks the clients to select the game mode and robot level if necessary.
-clientSession: Manages a game session between two clients.
-handleClient: Handles client connections, pairing two clients for a game.
-client.c
-main: Initializes the client, connects to the server, and manages interaction with the server.
-chooseGameMode: Allows the client to choose the game mode.
-play: Manages the game for the client.
-game.c
-displayGrid: Displays the game grid.
-initGrid: Initializes the game grid.
-addDisc: Adds a disc to the grid.
-checkWin: Checks the winning conditions.
-isGridFull: Checks if the grid is full. Other functions allow local testing of the game.
-computer.c
-bestMove: Uses the Minimax algorithm to choose the best move for the robot.
-minimax: Minimax algorithm to evaluate moves.
-evaluatePosition: Evaluates possible moves.
-evaluateScore: Scores the current grid state.
-isGameOver: Checks if the game is over.
-playBot: Executes the bot's move, using depth search with Minimax.
-removeBot: Removes bot moves during depth search to simulate further gameplay.
-isFull: Checks if a column is full.
-playHuman: Simulates an opponent's move for the bot.
-removeHuman: Removes simulated human moves during depth search.
-checkLine: Checks if a player has completed a line of 4, used by isGameOver.
-Authors
+## Key Files and Functions
+### server.c
+
+- `main`: Initializes the server, manages client connections, and orchestrates the games.
+- `changerModeJeu`: Asks the clients to choose the game mode and robot level if necessary.
+- `sessionClient`: Manages a game session between two clients.
+- `handleClient`: Handles client connections, pairing two clients for a game.
+
+### client.c
+
+- `main`: Initializes the client, connects to the server, and manages the interaction with the server.
+- `choisirModeDeJeu`: Allows the client to choose the game mode.
+- `jouer`: Manages the gameplay for the client.
+
+### jeu.c
+
+- `afficherGrille`: Displays the game grid.
+- `initialiserGrille`: Initializes the game grid.
+- `ajouterPion`: Adds a disc to the grid.
+- `verifierVictoire`: Checks the winning conditions.
+- `grillePleine`: Checks if the grid is full.
+  Other functions are used for local testing of the game.
+
+### ordinateur.c
+
+- `meilleurCoup`: Uses the Minimax algorithm to choose the best move for the robot.
+- `minimax`: Minimax algorithm to evaluate the moves.
+- `evaluerPosition`: Evaluates all possible moves.
+- `evaluerScore`: Scores the current grid state.
+- `jeuTermine`: Checks if the game is over.
+- `jouerBot`: Makes the bot play, using Minimax depth search.
+- `enleverBot`: Removes the bot's moves during depth search to simulate further gameplay.
+- `estPleine`: Checks if a column is full.
+- `jouerJoueur`: Simulates an opponent's move to challenge the bot.
+- `enleverJoueur`: Removes the simulated player's moves during depth search.
+- `verifierLigne`: Checks if a player has completed a line of 4, used by `jeuTermine`.
+
+## Authors
 School project for the Mines of Saint-Etienne.
-Martin RABIER @MartinRabier
-Tristan Panhelleux @tristanplx
+[Martin RABIER](https://github.com/MartinRabier) @MartinRabier
+[Tristan Panhelleux](https://github.com/tristanplx) @tristanplx
 # ProjetP4pse
 
 ## Projet Puissance 4
