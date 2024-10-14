@@ -1,4 +1,4 @@
-[English 🇬🇧](#english-version) 
+[![English](https://www.flaticon.com/free-icon/flag_14009734?related_id=14009734)](#english-version) 
 [Français 🇫🇷](#version-française)
 # ProjetP4pse
 
