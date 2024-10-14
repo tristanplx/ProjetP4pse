@@ -1,5 +1,5 @@
-[![English]🇬🇧](#english-version) 
-[![Français]🇫🇷](#version-française)
+[English 🇬🇧](#english-version) 
+[Français 🇫🇷](#version-française)
 # ProjetP4pse
 
 ## <a name="english-version"></a> English Version
