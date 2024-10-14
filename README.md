@@ -1,5 +1,5 @@
-[![English](https://cdn-icons-png.flaticon.com/512/197/197374.png)](#english-version) 
-[![Français](https://cdn-icons-png.flaticon.com/512/197/197560.png)](#version-française)
+[![English]🇬🇧](#english-version) 
+[![Français]🇫🇷](#version-française)
 # ProjetP4pse
 
 ## <a name="english-version"></a> English Version
