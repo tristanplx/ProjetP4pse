@@ -2,7 +2,7 @@
 [Français <img src="https://cdn-icons-png.flaticon.com/16/197/197560.png" width="16"/>](#version-française)
 # ProjetP4pse
 
-## <a name="english-version"></a> English Version
+<a name="english-version"></a> English Version
 
 ## Connect 4 Project
 
@@ -162,7 +162,7 @@ School project for the Mines of Saint-Etienne.
 [Tristan Panhelleux](https://github.com/tristanplx) @tristanplx
 # ProjetP4pse
 
-## <a name="version-française"></a> Version Française
+<a name="version-française"></a> Version Française
 
 ## Projet Puissance 4
 
