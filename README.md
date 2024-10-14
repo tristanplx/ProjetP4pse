@@ -5,7 +5,7 @@
 This project implements a Connect 4 game using sockets to enable communication between a server and multiple clients. The game supports the following modes: Human vs Human, Human vs Robot, and Robot vs Robot. The robot's level is chosen by the user.
 
 ## Project Structure
-'''
+```
 . 
 ├── client
 │ ├── client
@@ -44,7 +44,7 @@ This project implements a Connect 4 game using sockets to enable communication b
 ├── Makefile   
 ├── server.c   
 └── server.h
-'''
+```
 
 ## Compilation
 
@@ -70,23 +70,24 @@ To start the server, use the following command:
 
 ```sh
 ./server <port>
+```
 Where <port> is the port number that the server will use to listen for client connections.
 
 Starting the Client
 To start a client, use the following command:
 
-sh
-Copier le code
+```sh
 ./client localhost <port>
+```
 Where <port> is the port number where the server is listening.
 
 Example
 Start the server:
 
-sh
-Copier le code
+```sh
 make
 ./server 2000
+```
 Start two clients (in two separate terminals):
 
 sh
