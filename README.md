@@ -1,4 +1,149 @@
+# ProjetP4pse
 
+## Connect 4 Project
+
+This project implements a Connect 4 game using sockets to enable communication between a server and multiple clients. The game supports the following modes: Human vs Human, Human vs Robot, and Robot vs Robot. The robot's level is chosen by the user.
+
+## Project Structure
+'''
+. 
+├── client
+│ ├── client
+│ ├── client.c 
+│ ├── client.h 
+│ └── Makefile 
+├── game 
+│ ├── game.c
+│ └── game.h 
+├── include 
+│ ├── dataspec.h 
+│ ├── datathread.h
+│ ├── error.h 
+│ ├── line.h 
+│ ├── msgbox.h 
+│ ├── msg.h
+│ ├── pse.h 
+│ └── resolv.h 
+├── lib 
+│ └── libpse.a 
+├── Makefile.inc 
+├── modules
+│ ├── datathread.c 
+│ ├── error.c 
+│ ├── line.c
+│ ├── Makefile
+│ ├── msgbox.c
+│ ├── msg.c
+│ └── resolv.c
+├── computer
+│ ├── computer.c
+│ └── computer.h
+├── packages.microsoft.gpg
+├── README.md
+└── server   
+├── Makefile   
+├── server.c   
+└── server.h
+'''
+
+## Compilation
+
+To compile the project, use `gcc`:
+
+1. In the first terminal for the server, navigate to the server folder. To build the file, run:
+
+    ```sh
+    make
+    ```
+
+2. In another terminal for the client (and a second one), navigate to the client folder. To build the file, run:
+
+    ```sh
+    make
+    ```
+
+3. The application can handle multiple games at the same time. Repeat step 2 in new terminals to launch more games.
+
+### Starting the Server
+
+To start the server, use the following command:
+
+```sh
+./server <port>
+Where <port> is the port number that the server will use to listen for client connections.
+
+Starting the Client
+To start a client, use the following command:
+
+sh
+Copier le code
+./client localhost <port>
+Where <port> is the port number where the server is listening.
+
+Example
+Start the server:
+
+sh
+Copier le code
+make
+./server 2000
+Start two clients (in two separate terminals):
+
+sh
+Copier le code
+make
+./client localhost 2000
+Features
+Game Modes
+The server asks the clients to choose a game mode (classic or against a robot). If playing against a robot, the client can select its level.
+
+Game Grid
+The game grid is displayed and updated after each move.
+
+Win Detection
+The game automatically checks for winning conditions after each move.
+
+Robot Mode
+A client can choose to play against a robot. The robot uses the Minimax algorithm to make decisions. The search depth of this algorithm controls the difficulty of the game.
+
+Client/Server Application
+The game is launched via a server terminal and played with two client terminals.
+
+Multithreading
+Multiple games can run simultaneously.
+
+Key Files and Functions
+server.c
+main: Initializes the server, manages client connections, and orchestrates the games.
+changeGameMode: Asks the clients to select the game mode and robot level if necessary.
+clientSession: Manages a game session between two clients.
+handleClient: Handles client connections, pairing two clients for a game.
+client.c
+main: Initializes the client, connects to the server, and manages interaction with the server.
+chooseGameMode: Allows the client to choose the game mode.
+play: Manages the game for the client.
+game.c
+displayGrid: Displays the game grid.
+initGrid: Initializes the game grid.
+addDisc: Adds a disc to the grid.
+checkWin: Checks the winning conditions.
+isGridFull: Checks if the grid is full. Other functions allow local testing of the game.
+computer.c
+bestMove: Uses the Minimax algorithm to choose the best move for the robot.
+minimax: Minimax algorithm to evaluate moves.
+evaluatePosition: Evaluates possible moves.
+evaluateScore: Scores the current grid state.
+isGameOver: Checks if the game is over.
+playBot: Executes the bot's move, using depth search with Minimax.
+removeBot: Removes bot moves during depth search to simulate further gameplay.
+isFull: Checks if a column is full.
+playHuman: Simulates an opponent's move for the bot.
+removeHuman: Removes simulated human moves during depth search.
+checkLine: Checks if a player has completed a line of 4, used by isGameOver.
+Authors
+School project for the Mines of Saint-Etienne.
+Martin RABIER @MartinRabier
+Tristan Panhelleux @tristanplx
 # ProjetP4pse
 
 ## Projet Puissance 4
